@@ -1,5 +1,5 @@
 # This code stimate the volume of a solid given an (x, y) region
-# with top, bottom, left and right posible function restrictions
+# with back, front, left and right posible function restrictions
 # and ceiling and floor z restriction
 # It main porpuse is to stimate double integral calculation between
 # two functions (f:R^2 -> R) and in different region with 
@@ -50,20 +50,20 @@ class Solid():
 # Region object: the (x,y) region where the solid exist
 class Region():
 
-	def __init__(self, f_right, f_left, f_top, f_bottom):
+	def __init__(self, f_right, f_left, f_back, f_front):
 
 		self.f_left = f_left
 		self.f_right = f_right
-		self.f_top = f_top
-		self.f_bottom = f_bottom
+		self.f_back = f_back
+		self.f_front = f_front
 
 	# Return True if a given point is on the region
 	def is_in_region(self, point):
 
 		x, y = point[0], point[1]
 
-		return (self.f_top(x) >= y and 
-			    self.f_bottom(x) <= y and
+		return (self.f_back(x) >= y and 
+			    self.f_front(x) <= y and
 			    self.f_right(y) >= x and 
 			    self.f_left(y) <= x)
 
@@ -78,13 +78,13 @@ def f_left(y):
 
 	return 0
 
-# region restriction on top
-def f_top(x):
+# region restriction on back
+def f_back(x):
 
 	return 1
 
-# region restriction on bottom
-def f_bottom(x):
+# region restriction on front
+def f_front(x):
 
 	return 0
 
@@ -93,7 +93,7 @@ def f_ceiling(point):
 
 	x, y = point[0], point[1]
 
-	return 1
+	return (1/2)*x*(1+y)
 
 # solid restriction on floor
 def f_floor(point):
@@ -102,8 +102,8 @@ def f_floor(point):
 
 	return 0
 
-restriction = Restriction((0,1),(0,1),(0,3)) # Create the restriction cube
-region = Region(f_right, f_left, f_top, f_bottom) # Create the (x,y) region
+restriction = Restriction((0,1),(0,1),(0,1)) # Create the restriction cube
+region = Region(f_right, f_left, f_back, f_front) # Create the (x,y) region
 solid = Solid (region, f_ceiling, f_floor) # Create the solid in 
                                            # the region between two funtions
 
